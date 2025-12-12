@@ -9,7 +9,7 @@ from routers.seasons.schemas import (
 )
 from database import get_db
 from models import Farm, SeasonPlan, PlannedActivity, ActualActivity, StatusType
-from datetime import datetime
+from datetime import datetime, date
 from dependencies import verify_token, nairobi_tz
 
 

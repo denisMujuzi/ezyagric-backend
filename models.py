@@ -53,9 +53,6 @@ class SeasonPlan(Base):
     farmId: Mapped[int] = mapped_column(Integer, ForeignKey("farms.id"), nullable=False)
     cropName: Mapped[str] = mapped_column(String(120), nullable=False)
     seasonName: Mapped[str] = mapped_column(String(120), nullable=False)
-    totalEstimatedCostUgx: Mapped[float] = mapped_column(Numeric(12, 2), nullable=False, default=0.0)
-    totalActualCostUgx: Mapped[float] = mapped_column(Numeric(12, 2), nullable=False, default=0.0)
-    overDueActivitiesCount: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
 
     farm: Mapped[Farm] = relationship(back_populates="season_plans")
     planned_activities: Mapped[list["PlannedActivity"]] = relationship(

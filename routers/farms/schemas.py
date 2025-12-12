@@ -6,6 +6,9 @@ class FarmCreate(BaseModel):
 	name: str
 	sizeAcres: float
 
+class UpdateFarm(BaseModel):
+	name: str | None = None
+	sizeAcres: float | None = None
 
 class FarmOut(BaseModel):
 	id: int

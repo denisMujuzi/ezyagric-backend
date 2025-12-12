@@ -7,6 +7,10 @@ class SeasonCreate(BaseModel):
 	farmId: int
 	cropName: str
 	seasonName: str
+	
+class UpdateSeason(BaseModel):
+    cropName: str | None = None
+    seasonName: str | None = None
 
 
 class PlannedActivityCreate(BaseModel):
@@ -53,8 +57,6 @@ class SeasonOut(BaseModel):
 	farmId: int
 	cropName: str
 	seasonName: str
-	planned_activities: List[PlannedActivityOut]
-	actual_activities: List[ActualActivityOut]
 
 	class Config:
 		from_attributes = True

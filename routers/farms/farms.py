@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from routers.farms.schemas import FarmCreate, FarmOut
+from routers.farms.schemas import FarmCreate, FarmOut, UpdateFarm
 from database import get_db
 from models import Farm
 from dependencies import verify_token
@@ -51,6 +51,33 @@ def creating_a_farm(payload: FarmCreate, db: Session = Depends(get_db), farmer_i
         sizeAcres=payload.sizeAcres,
     )
 
+    # save to db
+    db.add(farm)
+    db.commit()
+    db.refresh(farm)
+    return farm
+
+# update farm
+@router.put("/{farmId}", response_model=FarmOut)
+def update_farm(farmId: int, payload: UpdateFarm, db: Session = Depends(get_db), farmer_id: int = Depends(verify_token)):
+    if not farmer_id:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized: Invalid Authorization token")
+    
+    # check if farm exists
+    farm = db.query(Farm).get(farmId)
+    if not farm:
+        raise HTTPException(status_code=404, detail="Farm not found")
+        
+    # check if farm belongs to authenticated farmer
+    if farm.farmerId != farmer_id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Forbidden: You can only update your own farms")
+    
+    # update fields if provided
+    if payload.name is not None:
+        farm.name = payload.name
+    if payload.sizeAcres is not None:
+        farm.sizeAcres = payload.sizeAcres
+    
     # save to db
     db.add(farm)
     db.commit()

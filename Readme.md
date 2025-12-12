@@ -196,9 +196,9 @@ The application models the following core entities:
 
 4. **Timezone Handling**: Uses Africa/Nairobi timezone for date operations to align with EzyAgric's operational region.
 
-5. **Cost Storage**: Total costs are stored as denormalized fields in SeasonPlan for quick access, and they are updates via database triggers that are ran on chnages to the planned_activities and actual_activities table
+5. **Cost Storage**: Total costs are stored as computed on request, and they are updated via the querying of planned activities if date.now is past the target date
 
-6. **Status Management**: Activity status is stored in the PlannedActivity model. Status should be recalculated via triggers based on:
+6. **Status Management**: Activity status is stored in the PlannedActivity model. Status is recalculated based on:
    - Presence of matching actual activity (COMPLETED)
    - Comparison of targetDate with today's date (UPCOMING vs OVERDUE)
 
@@ -247,6 +247,7 @@ If given more time, the following improvements would enhance the application:
    - Add activity type filtering in summary views
    - Include activity notes in summary responses
    - adding more CRUD endpoints on resources to be used on deleting and updating.
+   - Sending notifications to farmers on the overdue tasks. via sms, email or also app notications using the firebase cloud messaging.
 
 ### 6. **Testing**
    - Add unit tests for business logic

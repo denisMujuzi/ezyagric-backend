@@ -8,7 +8,11 @@ from database import get_db
 from sqlalchemy import text
 
 
-app = FastAPI()
+app = FastAPI(
+    title="EzyAgric Backend API",
+    version="0.1.0",
+    description="EzyAgric Backend API created by Mujuzi Denis. For testing purposes only. admin-key: admin.123@456",
+)
 
 app.include_router(farmers_router)
 app.include_router(farms_router)

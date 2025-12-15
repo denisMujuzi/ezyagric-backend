@@ -31,6 +31,7 @@ app.add_middleware(
 # check health of the app. currently only check if db is reachable
 @app.get("/health")
 async def health_check():
+    """check health of the app. currently only check if db is reachable"""
     try:
         db: Session = next(get_db())
         # simple query to check db connectivity

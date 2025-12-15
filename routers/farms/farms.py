@@ -12,7 +12,7 @@ router = APIRouter(prefix="/farms", tags=["farms"])
 # Get farms, optionally filter by farmerId
 @router.get("/", response_model=list[FarmOut])
 def read_farms(farmerId: int | None = None, db: Session = Depends(get_db), farmer_id: int = Depends(verify_token), admin_key: str | None = None):
-    
+    """Retrieve farms. If farmerId is provided, filter farms by that farmer. If no farmerId, return all farms. Admins can access all farms. while farmers can only access their own farms."""
     # if admin_key is provided, verify it and return all farms or farms for given farmerId
     if admin_key != None:
         # verify admin key
@@ -37,6 +37,7 @@ def read_farms(farmerId: int | None = None, db: Session = Depends(get_db), farme
 # create farm
 @router.post("/", response_model=FarmOut, status_code=201)
 def creating_a_farm(payload: FarmCreate, db: Session = Depends(get_db), farmer_id: int = Depends(verify_token)):
+    """Create a new farm. Only the owner farmer can create farms for their account."""
     if not farmer_id:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized: Invalid Authorization token")
     
@@ -60,6 +61,7 @@ def creating_a_farm(payload: FarmCreate, db: Session = Depends(get_db), farmer_i
 # update farm
 @router.put("/{farmId}", response_model=FarmOut)
 def update_farm(farmId: int, payload: UpdateFarm, db: Session = Depends(get_db), farmer_id: int = Depends(verify_token)):
+    """Update farm details. Only the owner farmer can update their farms."""
     if not farmer_id:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized: Invalid Authorization token")
     

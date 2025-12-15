@@ -16,6 +16,8 @@ router = APIRouter(prefix="/farmers", tags=["farmers"])
 # Get all farmers (admin only)
 @router.get("/", response_model=list[FarmerOut])
 def read_farmers(db: Session = Depends(get_db), admin_key: str = Header()):
+    """Retrieve all farmers. Admin only."""
+
     # verify admin key
     if admin_key != settings.ADMIN_KEY:
         raise HTTPException(status_code=401, detail="Invalid admin key")
@@ -26,6 +28,8 @@ def read_farmers(db: Session = Depends(get_db), admin_key: str = Header()):
 # Create a new farmer (admin only)
 @router.post("/", response_model=FarmerOut, status_code=status.HTTP_201_CREATED)
 def create_farmer(payload: FarmerCreate, db: Session = Depends(get_db), admin_key: str = Header()):
+    """Create a new farmer. Admin only. if phone number or email already exists, return 400."""
+    
     # verify admin key
     if admin_key != settings.ADMIN_KEY:
         raise HTTPException(status_code=401, detail="Invalid admin key")
@@ -65,6 +69,8 @@ def create_farmer(payload: FarmerCreate, db: Session = Depends(get_db), admin_ke
 # Farmer login
 @router.post("/login")
 def login_farmer(payload: FarmerLogin, db: Session = Depends(get_db)):
+    """Login farmer and return JWT access token."""
+
     # find farmer by phone number
     farmer = db.query(Farmer).filter(Farmer.phoneNumber == payload.phoneNumber).first()
     if not farmer:

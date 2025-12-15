@@ -19,6 +19,7 @@ router = APIRouter(prefix="/seasons", tags=["seasons"])
 # Create a new season plan
 @router.post("/", response_model=SeasonOut, status_code=201)
 def create_season(payload: SeasonCreate, db: Session = Depends(get_db), farmer_id: int = Depends(verify_token)):
+    """Create a new season plan for a farm. Only the owner farmer can create a season for their farm."""
     if not farmer_id:
         raise HTTPException(status_code=401, detail="Unauthorized: Invalid Authorization token")
     
@@ -47,6 +48,7 @@ def create_season(payload: SeasonCreate, db: Session = Depends(get_db), farmer_i
 # update season
 @router.put("/{seasonId}", response_model=SeasonOut)
 def update_season(seasonId: int, payload: UpdateSeason, db: Session = Depends(get_db), farmer_id: int = Depends(verify_token)):
+    """Update season details. Only the owner farmer can update their seasons."""
     if not farmer_id:  
         raise HTTPException(status_code=401, detail="Unauthorized: Invalid Authorization token")
     # check if season exists
@@ -74,6 +76,7 @@ def update_season(seasonId: int, payload: UpdateSeason, db: Session = Depends(ge
 # Add planned activities to a season
 @router.post("/{seasonId}/planned-activities", status_code=201)
 def add_planned_activities(seasonId: int, payload: list[PlannedActivityCreate], db: Session = Depends(get_db), farmer_id: int = Depends(verify_token)):
+    """Add planned activities to a season. Only the owner farmer can add activities to their seasons."""
     if not farmer_id:
         raise HTTPException(status_code=401, detail="Unauthorized: Invalid Authorization token")
     
@@ -108,6 +111,7 @@ def add_planned_activities(seasonId: int, payload: list[PlannedActivityCreate], 
 # Add actual activities to a season
 @router.post("/{seasonId}/actual-activities", status_code=201)
 def add_actual_activities(seasonId: int, payloads: list[ActualActivityCreate], db: Session = Depends(get_db), farmer_id: int = Depends(verify_token)):
+    """Add actual activities to a season. Only the owner farmer can add activities to their seasons."""
     if not farmer_id:
         raise HTTPException(status_code=401, detail="Unauthorized: Invalid Authorization token")
     
@@ -152,6 +156,7 @@ def add_actual_activities(seasonId: int, payloads: list[ActualActivityCreate], d
 # Get season details with planned and actual activities
 @router.get("/{seasonId}")
 def get_season_details(seasonId: int, db: Session = Depends(get_db), farmer_id: int = Depends(verify_token)):
+    """Get season details with planned and actual activities. Only the owner farmer can access their seasons. If target date < today and status is not COMPLETED, mark as OVERDUE and update db."""
     if not farmer_id:
         raise HTTPException(status_code=401, detail="Unauthorized: Invalid Authorization token")
     
@@ -191,6 +196,7 @@ def get_season_details(seasonId: int, db: Session = Depends(get_db), farmer_id: 
 # Get season summary
 @router.get("/{seasonId}/summary")
 def get_season_summary(seasonId: int, db: Session = Depends(get_db), farmer_id: int = Depends(verify_token)):
+    """Get season summary. Only the owner farmer can access their seasons. If target date < today and status is not COMPLETED, mark as OVERDUE and update db and compute counts and costs."""
     if not farmer_id:
         raise HTTPException(status_code=401, detail="Unauthorized: Invalid Authorization token")
     

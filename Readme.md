@@ -3,6 +3,7 @@
 A FastAPI-based backend application for managing farmers, farms, and season planning with activity tracking. This application allows field officers to register farmers and farms, create season plans with planned activities, log actual field activities, and view plan vs actual summaries.
 
 Zero trust architecture approach has been implemented to ensure that only authenticated and authorized users can access resources. All sensitive endpoints require JWT authentication, and admin-level actions require a separate admin key. This minimizes the risk of unauthorized access and enforces strict separation of privileges.
+- https://ezyagric-backend.vercel.app/docs
 
 ## Table of Contents
 

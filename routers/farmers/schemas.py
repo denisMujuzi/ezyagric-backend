@@ -6,6 +6,7 @@ class FarmerCreate(BaseModel):
 	phoneNumber: str
 	email: EmailStr | None = None
 	password: str
+	gender: str
 
 
 class FarmerOut(BaseModel):

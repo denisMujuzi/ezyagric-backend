@@ -57,6 +57,7 @@ def create_farmer(payload: FarmerCreate, db: Session = Depends(get_db), admin_ke
         phoneNumber=payload.phoneNumber,
         email=payload.email,
         hashedPassword=hashed,
+        gender=payload.gender
     )
 
     # save to db

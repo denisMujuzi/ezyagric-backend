@@ -23,6 +23,7 @@ class Farmer(Base):
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     phoneNumber: Mapped[str] = mapped_column(String(32), nullable=False, unique=True)
     email: Mapped[str] = mapped_column(String(255), nullable=True, unique=True)
+    gender: Mapped[str] = mapped_column(String(255), nullable=True)
     hashedPassword: Mapped[str] = mapped_column(String(255), nullable=False)
     createdAt: Mapped[Date] = mapped_column(Date, nullable=False, default=lambda: datetime.now(nairobi_tz))
 
